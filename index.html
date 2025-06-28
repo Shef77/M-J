@@ -24,10 +24,37 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <img src="images/Water Slide.jpg" alt="Water Slide" class="hero-img">
+        <div class="hero-slider">
+            <div class="slide active">
+                <img src="images/Water Slide.jpg" alt="Water Slide" class="hero-img">
+            </div>
+            <div class="slide">
+                <img src="images/bigwaterslide.jpg" alt="Big Water Slide" class="hero-img">
+            </div>
+            <div class="slide">
+                <img src="images/Bounce House.jpg" alt="Bounce House" class="hero-img">
+            </div>
+            <div class="slide">
+                <img src="images/WhiteMiniCastle.jpg" alt="White Bounce Castle" class="hero-img">
+            </div>
+            <div class="slide">
+                <img src="images/Snowglobe.jpg" alt="Inflatable Snowglobe" class="hero-img">
+            </div>
+        </div>
         <div class="hero-content">
             <h2>Bounce with the Best</h2>
             <a href="contact.html" class="btn-primary">Book Now</a>
+        </div>
+        <div class="slider-controls">
+            <button class="slider-btn prev" onclick="changeSlide(-1)">❮</button>
+            <button class="slider-btn next" onclick="changeSlide(1)">❯</button>
+        </div>
+        <div class="slider-dots">
+            <span class="dot active" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+            <span class="dot" onclick="currentSlide(4)"></span>
+            <span class="dot" onclick="currentSlide(5)"></span>
         </div>
     </section>
 
@@ -39,9 +66,13 @@
                 <img src="images/Water Slide.jpg" alt="Water Slide">
                 <span>Water Slide</span>
             </a>
+            <a href="rentals.html#water-slide" class="rental-card">
+                <img src="images/Water_slide.jpg" alt="Water Slide - Different Angle">
+                <span>Big Water Slide</span>
+            </a>
             <a href="rentals.html#bounce-house" class="rental-card">
                 <img src="images/Bounce House.jpg" alt="Bounce House">
-                <span>Bounce House</span>
+                <span>Bounce House With Slide</span>
             </a>
             <a href="rentals.html#white-bounce-castle" class="rental-card">
                 <img src="images/WhiteMiniCastle.jpg" alt="White Bounce Castle">
@@ -63,5 +94,148 @@
             &copy; 2025 M&J Party Pros
         </div>
     </footer>
+
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            // Hide all slides
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            // Show current slide
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+        }
+
+        function changeSlide(direction) {
+            currentSlideIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
+            showSlide(currentSlideIndex);
+        }
+
+        function currentSlide(index) {
+            currentSlideIndex = index - 1;
+            showSlide(currentSlideIndex);
+        }
+
+        // Auto-rotate slides every 4 seconds
+        setInterval(() => {
+            changeSlide(1);
+        }, 4000);
+
+        // Water splash animation function
+        function createSplashEffect(event) {
+            const button = event.currentTarget;
+            const rect = button.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            const splash = document.createElement('div');
+            splash.className = 'splash-effect';
+            splash.style.left = x + 'px';
+            splash.style.top = y + 'px';
+            
+            button.appendChild(splash);
+            
+            setTimeout(() => {
+                splash.remove();
+            }, 600);
+        }
+
+        // Add splash effects to all interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const interactiveElements = document.querySelectorAll('nav a, .btn-primary, .btn-secondary, .rental-checkbox input[type="checkbox"], .pref-btn');
+            
+            interactiveElements.forEach(element => {
+                element.addEventListener('click', createSplashEffect);
+            });
+
+            // Water trail effect
+            let mouseX = 0, mouseY = 0;
+            let trailInterval;
+            let isMoving = false;
+
+            // Create custom cursor
+            const cursor = document.createElement('div');
+            cursor.className = 'custom-cursor';
+            document.body.appendChild(cursor);
+
+            // Track mouse movement
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursor.style.left = mouseX - 10 + 'px';
+                cursor.style.top = mouseY - 10 + 'px';
+
+                if (!isMoving) {
+                    isMoving = true;
+                    startWaterTrail();
+                }
+
+                // Reset movement timer
+                clearTimeout(trailInterval);
+                trailInterval = setTimeout(() => {
+                    isMoving = false;
+                }, 100);
+            });
+
+            // Create water trail
+            function startWaterTrail() {
+                if (!isMoving) return;
+
+                // Create main water droplet
+                const droplet = document.createElement('div');
+                droplet.className = 'water-trail';
+                droplet.style.left = mouseX - 3 + 'px';
+                droplet.style.top = mouseY - 4 + 'px';
+                document.body.appendChild(droplet);
+
+                // Create ripple effect
+                const ripple = document.createElement('div');
+                ripple.className = 'water-ripple';
+                ripple.style.left = mouseX - 1.5 + 'px';
+                ripple.style.top = mouseY - 1.5 + 'px';
+                document.body.appendChild(ripple);
+
+                // Create additional smaller water drops randomly
+                if (Math.random() > 0.7) {
+                    const smallDrop = document.createElement('div');
+                    smallDrop.className = 'water-drop';
+                    smallDrop.style.left = (mouseX - 2 + Math.random() * 6 - 3) + 'px';
+                    smallDrop.style.top = (mouseY - 3 + Math.random() * 4 - 2) + 'px';
+                    document.body.appendChild(smallDrop);
+
+                    setTimeout(() => {
+                        smallDrop.remove();
+                    }, 2000);
+                }
+
+                // Remove elements after animation
+                setTimeout(() => {
+                    droplet.remove();
+                    ripple.remove();
+                }, 2000);
+
+                // Continue trail if still moving
+                if (isMoving) {
+                    setTimeout(startWaterTrail, 60);
+                }
+            }
+
+            // Hover effects for interactive elements
+            const hoverElements = document.querySelectorAll('a, button, input[type="checkbox"], .pref-btn');
+            hoverElements.forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hover');
+                });
+                element.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hover');
+                });
+            });
+        });
+    </script>
 </body>
 </html> 

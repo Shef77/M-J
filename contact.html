@@ -52,14 +52,75 @@
                 <label for="event-date">Event Date</label>
                 <input type="date" id="event-date" name="event-date" required>
 
-                <label for="rental-choice">Rental Choice</label>
-                <select id="rental-choice" name="rental-choice" required>
-                    <option value="">-- Please Select --</option>
-                    <option value="water-slide">Water Slide</option>
-                    <option value="bounce-house">Bounce House</option>
-                    <option value="white-bounce-castle">White Bounce Castle</option>
-                    <option value="inflatable-snowglobe">Inflatable Snowglobe</option>
-                </select>
+                <div class="rental-selection">
+                    <h3>Select Your Rentals</h3>
+                    <p class="selection-note">Check the items you'd like to rent and specify wet/dry preference:</p>
+                    
+                    <div class="rental-option">
+                        <div class="rental-checkbox">
+                            <input type="checkbox" id="water-slide-check" name="rentals[]" value="water-slide">
+                            <label for="water-slide-check">Water Slide</label>
+                        </div>
+                        <div class="preference-buttons">
+                            <input type="radio" id="water-slide-wet" name="water-slide-pref" value="wet" disabled>
+                            <label for="water-slide-wet" class="pref-btn">Wet</label>
+                            <input type="radio" id="water-slide-dry" name="water-slide-pref" value="dry" disabled>
+                            <label for="water-slide-dry" class="pref-btn">Dry</label>
+                        </div>
+                    </div>
+
+                    <div class="rental-option">
+                        <div class="rental-checkbox">
+                            <input type="checkbox" id="big-water-slide-check" name="rentals[]" value="big-water-slide">
+                            <label for="big-water-slide-check">Big Water Slide</label>
+                        </div>
+                        <div class="preference-buttons">
+                            <input type="radio" id="big-water-slide-wet" name="big-water-slide-pref" value="wet" disabled>
+                            <label for="big-water-slide-wet" class="pref-btn">Wet</label>
+                            <input type="radio" id="big-water-slide-dry" name="big-water-slide-pref" value="dry" disabled>
+                            <label for="big-water-slide-dry" class="pref-btn">Dry</label>
+                        </div>
+                    </div>
+
+                    <div class="rental-option">
+                        <div class="rental-checkbox">
+                            <input type="checkbox" id="bounce-house-check" name="rentals[]" value="bounce-house">
+                            <label for="bounce-house-check">Bounce House With Slide</label>
+                        </div>
+                        <div class="preference-buttons">
+                            <input type="radio" id="bounce-house-wet" name="bounce-house-pref" value="wet" disabled>
+                            <label for="bounce-house-wet" class="pref-btn">Wet</label>
+                            <input type="radio" id="bounce-house-dry" name="bounce-house-pref" value="dry" disabled>
+                            <label for="bounce-house-dry" class="pref-btn">Dry</label>
+                        </div>
+                    </div>
+
+                    <div class="rental-option">
+                        <div class="rental-checkbox">
+                            <input type="checkbox" id="white-castle-check" name="rentals[]" value="white-bounce-castle">
+                            <label for="white-castle-check">White Bounce Castle</label>
+                        </div>
+                        <div class="preference-buttons">
+                            <input type="radio" id="white-castle-wet" name="white-castle-pref" value="wet" disabled>
+                            <label for="white-castle-wet" class="pref-btn">Wet</label>
+                            <input type="radio" id="white-castle-dry" name="white-castle-pref" value="dry" disabled>
+                            <label for="white-castle-dry" class="pref-btn">Dry</label>
+                        </div>
+                    </div>
+
+                    <div class="rental-option">
+                        <div class="rental-checkbox">
+                            <input type="checkbox" id="snowglobe-check" name="rentals[]" value="inflatable-snowglobe">
+                            <label for="snowglobe-check">Inflatable Snowglobe</label>
+                        </div>
+                        <div class="preference-buttons">
+                            <input type="radio" id="snowglobe-wet" name="snowglobe-pref" value="wet" disabled>
+                            <label for="snowglobe-wet" class="pref-btn">Wet</label>
+                            <input type="radio" id="snowglobe-dry" name="snowglobe-pref" value="dry" disabled>
+                            <label for="snowglobe-dry" class="pref-btn">Dry</label>
+                        </div>
+                    </div>
+                </div>
 
                 <label for="message">Message / Questions</label>
                 <textarea id="message" name="message" rows="4" required></textarea>
@@ -78,5 +139,165 @@
             &copy; 2025 M&J Party Pros
         </div>
     </footer>
+
+    <script>
+        // Water splash animation function
+        function createSplashEffect(event) {
+            const button = event.currentTarget;
+            const rect = button.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            const splash = document.createElement('div');
+            splash.className = 'splash-effect';
+            splash.style.left = x + 'px';
+            splash.style.top = y + 'px';
+            
+            button.appendChild(splash);
+            
+            setTimeout(() => {
+                splash.remove();
+            }, 600);
+        }
+
+        // Handle rental selection checkboxes
+        const rentalCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+        
+        rentalCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const rentalOption = this.closest('.rental-option');
+                const preferenceButtons = rentalOption.querySelectorAll('input[type="radio"]');
+                const prefBtnLabels = rentalOption.querySelectorAll('.pref-btn');
+                
+                if (this.checked) {
+                    // Enable preference buttons and add selected styling
+                    preferenceButtons.forEach(btn => btn.disabled = false);
+                    rentalOption.classList.add('selected');
+                    
+                    // Auto-select "Dry" as default
+                    const dryRadio = rentalOption.querySelector('input[value="dry"]');
+                    if (dryRadio) {
+                        dryRadio.checked = true;
+                    }
+                } else {
+                    // Disable preference buttons and remove selected styling
+                    preferenceButtons.forEach(btn => {
+                        btn.disabled = true;
+                        btn.checked = false;
+                    });
+                    rentalOption.classList.remove('selected');
+                }
+            });
+        });
+
+        // Handle preference button clicks
+        const preferenceRadios = document.querySelectorAll('input[type="radio"]');
+        preferenceRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Remove active class from all preference buttons in this group
+                const rentalOption = this.closest('.rental-option');
+                const allPrefBtns = rentalOption.querySelectorAll('.pref-btn');
+                allPrefBtns.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to selected button
+                const selectedLabel = this.nextElementSibling;
+                if (selectedLabel) {
+                    selectedLabel.classList.add('active');
+                }
+            });
+        });
+
+        // Add splash effects to all interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const interactiveElements = document.querySelectorAll('nav a, .btn-primary, .btn-secondary, .rental-checkbox input[type="checkbox"], .pref-btn');
+            
+            interactiveElements.forEach(element => {
+                element.addEventListener('click', createSplashEffect);
+            });
+
+            // Water trail effect
+            let mouseX = 0, mouseY = 0;
+            let trailInterval;
+            let isMoving = false;
+
+            // Create custom cursor
+            const cursor = document.createElement('div');
+            cursor.className = 'custom-cursor';
+            document.body.appendChild(cursor);
+
+            // Track mouse movement
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursor.style.left = mouseX - 10 + 'px';
+                cursor.style.top = mouseY - 10 + 'px';
+
+                if (!isMoving) {
+                    isMoving = true;
+                    startWaterTrail();
+                }
+
+                // Reset movement timer
+                clearTimeout(trailInterval);
+                trailInterval = setTimeout(() => {
+                    isMoving = false;
+                }, 100);
+            });
+
+            // Create water trail
+            function startWaterTrail() {
+                if (!isMoving) return;
+
+                // Create main water droplet
+                const droplet = document.createElement('div');
+                droplet.className = 'water-trail';
+                droplet.style.left = mouseX - 3 + 'px';
+                droplet.style.top = mouseY - 4 + 'px';
+                document.body.appendChild(droplet);
+
+                // Create ripple effect
+                const ripple = document.createElement('div');
+                ripple.className = 'water-ripple';
+                ripple.style.left = mouseX - 1.5 + 'px';
+                ripple.style.top = mouseY - 1.5 + 'px';
+                document.body.appendChild(ripple);
+
+                // Create additional smaller water drops randomly
+                if (Math.random() > 0.7) {
+                    const smallDrop = document.createElement('div');
+                    smallDrop.className = 'water-drop';
+                    smallDrop.style.left = (mouseX - 2 + Math.random() * 6 - 3) + 'px';
+                    smallDrop.style.top = (mouseY - 3 + Math.random() * 4 - 2) + 'px';
+                    document.body.appendChild(smallDrop);
+
+                    setTimeout(() => {
+                        smallDrop.remove();
+                    }, 2000);
+                }
+
+                // Remove elements after animation
+                setTimeout(() => {
+                    droplet.remove();
+                    ripple.remove();
+                }, 2000);
+
+                // Continue trail if still moving
+                if (isMoving) {
+                    setTimeout(startWaterTrail, 60);
+                }
+            }
+
+            // Hover effects for interactive elements
+            const hoverElements = document.querySelectorAll('a, button, input[type="checkbox"], .pref-btn');
+            hoverElements.forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hover');
+                });
+                element.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hover');
+                });
+            });
+        });
+    </script>
 </body>
 </html> 

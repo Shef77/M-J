@@ -10,16 +10,20 @@ This is a static website built with HTML and CSS that showcases M&J Party Pros' 
 
 - **Home Page**: Features hero section with call-to-action and preview of rental equipment
 - **Rentals Page**: Detailed gallery of available bounce houses, water slides, and inflatables
-- **Contact Page**: Contact form and phone numbers for booking inquiries
+- **Contact Page**: Contact form with multiple rental selection options and wet/dry usage preferences
 - **Responsive Design**: Mobile-friendly layout that works on all devices
 
 ## Rental Equipment
 
-The website showcases four main rental items:
+The website showcases six main rental items:
 - Water Slide
+- Big Water Slide
+- Big Water Slide 2
 - Bounce House  
 - White Bounce Castle
 - Inflatable Snowglobe
+
+*All equipment can be used wet or dry for maximum versatility!*
 
 ## Contact Information
 

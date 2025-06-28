@@ -15,6 +15,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    cursor: auto; /* Show default cursor on desktop */
 }
 
 /* Header & Navigation */
@@ -85,15 +86,31 @@ nav a:hover {
     overflow: hidden;
 }
 
+.hero-slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
 .hero-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     filter: brightness(0.7);
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
 }
 
 .hero-content {
@@ -107,6 +124,61 @@ nav a:hover {
     font-size: 2.5rem;
     margin-bottom: 1rem;
     text-shadow: 2px 2px 8px #0006;
+}
+
+.slider-controls {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+}
+
+.slider-btn {
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    color: #222;
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider-btn:hover {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.slider-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.dot.active,
+.dot:hover {
+    background: rgba(255, 255, 255, 0.9);
 }
 
 .btn-primary {
@@ -145,9 +217,21 @@ nav a:hover {
     font-weight: 700;
 }
 
+.rental-note {
+    text-align: center;
+    color: #d7263d;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    background: #fff3cd;
+    padding: 0.8rem;
+    border-radius: 8px;
+    border-left: 4px solid #ffd43b;
+}
+
 .rentals-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1.5rem;
 }
 
@@ -266,8 +350,124 @@ nav a:hover {
 }
 
 .contact-form button {
-    margin-top: 1.2rem;
-    width: 100%;
+    background: #ffd43b;
+    color: #222;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+/* Rental Selection Styles */
+.rental-selection {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 2px solid #e9ecef;
+}
+
+.rental-selection h3 {
+    color: #4dabf7;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.selection-note {
+    color: #666;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.rental-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: #fff;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.rental-option:hover {
+    border-color: #4dabf7;
+    box-shadow: 0 2px 8px rgba(77, 171, 247, 0.1);
+}
+
+.rental-option.selected {
+    border-color: #ffd43b;
+    background: #fffbf0;
+    box-shadow: 0 2px 12px rgba(255, 212, 59, 0.2);
+}
+
+.rental-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.rental-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #ffd43b;
+    cursor: pointer;
+}
+
+.rental-checkbox label {
+    font-weight: 600;
+    color: #222;
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+.preference-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.preference-buttons input[type="radio"] {
+    display: none;
+}
+
+.pref-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid #dee2e6;
+    border-radius: 6px;
+    background: #fff;
+    color: #666;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+
+.pref-btn:hover {
+    border-color: #4dabf7;
+    color: #4dabf7;
+}
+
+.preference-buttons input[type="radio"]:checked + .pref-btn {
+    background: #4dabf7;
+    border-color: #4dabf7;
+    color: #fff;
+}
+
+.preference-buttons input[type="radio"]:disabled + .pref-btn {
+    background: #f8f9fa;
+    border-color: #dee2e6;
+    color: #adb5bd;
+    cursor: not-allowed;
+}
+
+.preference-buttons input[type="radio"]:disabled:checked + .pref-btn {
+    background: #adb5bd;
+    border-color: #adb5bd;
+    color: #fff;
 }
 
 /* Footer */
@@ -310,5 +510,225 @@ footer {
     }
     header h1 {
         font-size: 1.3rem;
+    }
+}
+
+/* Water Splash Animation */
+@keyframes waterSplash {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+        background: radial-gradient(circle, #4dabf7 0%, #87ceeb 50%, transparent 100%);
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+        background: radial-gradient(circle, #4dabf7 0%, #87ceeb 40%, #b3e5fc 70%, transparent 100%);
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+        background: radial-gradient(circle, #4dabf7 0%, #87ceeb 30%, #b3e5fc 60%, #e1f5fe 90%, transparent 100%);
+    }
+}
+
+@keyframes rippleEffect {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.splash-effect {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1000;
+    animation: waterSplash 0.6s ease-out forwards;
+}
+
+.ripple-effect {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(77, 171, 247, 0.6);
+    pointer-events: none;
+    z-index: 1000;
+    animation: rippleEffect 0.8s ease-out forwards;
+}
+
+/* Button click animations */
+nav a,
+.btn-primary,
+.btn-secondary,
+.rental-checkbox input[type="checkbox"],
+.pref-btn {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.1s ease;
+}
+
+nav a:active,
+.btn-primary:active,
+.btn-secondary:active {
+    transform: scale(0.95);
+}
+
+.rental-checkbox input[type="checkbox"]:active {
+    transform: scale(1.1);
+}
+
+.pref-btn:active {
+    transform: scale(0.95);
+}
+
+/* Hover effects with water theme */
+nav a:hover,
+.btn-primary:hover,
+.btn-secondary:hover {
+    box-shadow: 0 4px 15px rgba(77, 171, 247, 0.3);
+}
+
+.pref-btn:hover {
+    box-shadow: 0 2px 8px rgba(77, 171, 247, 0.2);
+}
+
+/* Enhanced checkbox styling */
+.rental-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #4dabf7;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.rental-checkbox input[type="checkbox"]:checked {
+    animation: checkboxPop 0.3s ease;
+}
+
+@keyframes checkboxPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Water Trail Effect - More Realistic Water Drops */
+.water-trail {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    width: 6px;
+    height: 8px;
+    background: linear-gradient(135deg, #4dabf7 0%, #87ceeb 50%, #b3e5fc 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: waterTrail 1.8s ease-out forwards;
+    box-shadow: 0 0 4px rgba(77, 171, 247, 0.4);
+}
+
+.water-ripple {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    width: 3px;
+    height: 3px;
+    background: radial-gradient(circle, rgba(77, 171, 247, 0.8) 0%, rgba(135, 206, 235, 0.4) 70%, transparent 100%);
+    border-radius: 50%;
+    animation: waterRipple 2.5s ease-out forwards;
+}
+
+.water-drop {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9997;
+    width: 4px;
+    height: 6px;
+    background: linear-gradient(180deg, #4dabf7 0%, #87ceeb 60%, transparent 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: waterDrop 2s ease-out forwards;
+    box-shadow: 0 1px 2px rgba(77, 171, 247, 0.3);
+}
+
+@keyframes waterTrail {
+    0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 0.9;
+    }
+    30% {
+        transform: scale(0.9) rotate(5deg);
+        opacity: 0.7;
+    }
+    70% {
+        transform: scale(0.6) rotate(10deg);
+        opacity: 0.4;
+    }
+    100% {
+        transform: scale(0.2) rotate(15deg);
+        opacity: 0;
+    }
+}
+
+@keyframes waterRipple {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(2);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+@keyframes waterDrop {
+    0% {
+        transform: scale(1) translateY(0);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(0.8) translateY(2px);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(0.3) translateY(5px);
+        opacity: 0;
+    }
+}
+
+/* Cursor enhancement */
+.custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #4dabf7 0%, #87ceeb 70%, transparent 100%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    mix-blend-mode: screen;
+    transition: transform 0.1s ease;
+    opacity: 0.8;
+}
+
+.custom-cursor.hover {
+    transform: scale(1.5);
+    background: radial-gradient(circle, #ffd43b 0%, #4dabf7 70%, transparent 100%);
+}
+
+/* Show default cursor on mobile */
+@media (max-width: 768px) {
+    body {
+        cursor: auto;
+    }
+    .custom-cursor {
+        display: none;
     }
 } 
